@@ -424,7 +424,7 @@ spec:
               - "/wp-install.sh"
         readinessProbe:
           httpGet:
-            path: /
+            path: /{{ .Values.wordpress.subdirectory }}
             port: 80
           initialDelaySeconds: 30
           periodSeconds: 10
@@ -433,7 +433,7 @@ spec:
           failureThreshold: 5
         livenessProbe:
           httpGet:
-            path: /
+            path: /{{ .Values.wordpress.subdirectory }}
             port: 80
           initialDelaySeconds: 120
       - image: {{ .Values.apache.exporter.image }}
