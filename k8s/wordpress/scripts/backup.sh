@@ -92,7 +92,7 @@ kubectl exec "${wordpress_pod0_name}" -n "${namespace}" -c wordpress \
   -- /bin/bash -c "\
      mkdir -p ${remote_backup_dir} && \
      cd ${remote_backup_dir} && \
-     tar -zcvf ${files_backup_file} -C /var/www/html . && \
+     tar -zcvf ${files_backup_file} -C /var/www/html/{{ .Values.wordpress.subdirectory }} . && \
      md5sum ${files_backup_file}  > ${files_backup_file}.md5"
 
 cd "${local_backup_dir}"

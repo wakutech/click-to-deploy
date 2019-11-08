@@ -122,8 +122,12 @@ kubectl exec "${wordpress_pod0_name}" -n "${namespace}" -c wordpress \
      mkdir -p ${remote_backup_dir} && \
      mkdir -p ${remote_restore_dir} && \
      cd ${remote_backup_dir} && \
-     tar -zcvf ${wp_files_backup} -C /var/www/html . && \
-     rm -rf /var/www/html/*"
+     tar -zcvf ${wp_files_backup} -C /var/www/html/{{ .Values.wordpress.subdirectory }} . && \
+     {{ if .Values.wordpress.subdirectory -}}
+     rm -rf /var/www/html/{{ .Values.wordpress.subdirectory }}/*"
+     {{- else -}}
+     rm -rf /var/www/html/{{ .Values.wordpress.subdirectory }}/*"
+     {{- end }}
 
 echo "Copying files backup version ${backup_version} to restore..."
 kubectl cp -n "${namespace}" "${files_dump_file}" \
@@ -137,7 +141,7 @@ kubectl exec "${app}-wordpress-0" -n "${namespace}" -c wordpress \
 
 echo "Unpacking wordpress files from backup..."
 kubectl exec "${wordpress_pod0_name}" -n "${namespace}" -c wordpress \
-  -- /bin/bash -c "tar xvf ${remote_restore_dir}/${files_dump_file} -C /var/www/html"
+  -- /bin/bash -c "tar xvf ${remote_restore_dir}/${files_dump_file} -C /var/www/html/articles"
 
 echo "Removing remote backup archive fore version ${backup_version}..."
 kubectl exec "${wordpress_pod0_name}" -n "${namespace}" -c wordpress \
