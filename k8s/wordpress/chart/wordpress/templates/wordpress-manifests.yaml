@@ -411,7 +411,7 @@ spec:
           {{ if .Values.wordpress.subdirectory -}}
           mountPath: /var/www/html/{{ .Values.wordpress.subdirectory }}/.htaccess
           {{- else -}}
-          mountPath: /var/www/html
+          mountPath: /var/www/html/.htaccess
           {{- end }}
           subPath: .htaccess
           readOnly: true
